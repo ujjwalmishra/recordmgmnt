@@ -5,8 +5,122 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Asg2_uxm170330"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="800">
+    
     <Grid>
-        
+        <Button Content="Add"  Click="Add_Button_Click"     HorizontalAlignment="Left"
+                Margin="10,10,0,0"
+                VerticalAlignment="Top"
+                Width="75"/>
+        <ListBox Name="lbTodoList" Width="200" HorizontalAlignment="Left" Margin="10,40,0,0">
+            <ListBox.Resources>
+                <!-- Background of selected item when focussed -->
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                         Color="Blue" />
+                <!-- Background of selected item when not focussed -->
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                         Color="Blue" />
+
+            </ListBox.Resources>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid ShowGridLines="True" MouseLeftButtonUp="Select_Record">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80" />
+                            <ColumnDefinition Width="80" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                        <RowDefinition Height="20"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="fName"/>
+                                    <Binding Path="lName"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Grid.Column="1" Text="{Binding phone}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Viewbox  Width="560" HorizontalAlignment="Right" Height="600">
+                    <Grid ShowGridLines="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                            <ColumnDefinition Width="200" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="100"></RowDefinition>
+                    <RowDefinition Height="100"></RowDefinition>
+                    <RowDefinition Height="100"></RowDefinition>
+                    <RowDefinition Height="100"></RowDefinition>
+
+                    <RowDefinition Height="100"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel Margin="10"  Grid.Column="0" Grid.Row="0">
+                    <Label Content="First Name:" Target="{Binding ElementName=fName}" />
+                    <TextBox Name="fName" TextChanged="textChangedEventHandler" Text="{Binding fName, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Margin="10"  Grid.Column="1" Grid.Row="0">
+                    <Label Content="Middle Name:" Target="{Binding ElementName=mName}" />
+                    <TextBox Name="mName" TextChanged="textChangedEventHandler" Text="{Binding mName, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Margin="10"  Grid.Column="2" Grid.Row="0">
+                    <Label Content="Last Name:" Target="{Binding ElementName=lName}" />
+                    <TextBox Name="lName" TextChanged="textChangedEventHandler" Text="{Binding lName, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Margin="10"  Grid.Column="0" Grid.Row="1">
+                    <Label Content="Address Line 1:" Target="{Binding ElementName=address1}" />
+                    <TextBox Name="address1" TextChanged="textChangedEventHandler" Text="{Binding address1, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Margin="10"  Grid.Column="1" Grid.Row="1">
+                    <Label Content="Address Line 2:" Target="{Binding ElementName=address2}" />
+                    <TextBox  Name="address2" TextChanged="textChangedEventHandler" Text="{Binding address2, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Margin="10"  Grid.Column="2" Grid.Row="1">
+                    <Label Content="City" Target="{Binding ElementName=city}" />
+                    <TextBox  Name="city" TextChanged="textChangedEventHandler" Text="{Binding city, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Margin="10"  Grid.Column="0" Grid.Row="2">
+                    <Label Content="State" Target="{Binding ElementName=state}" />
+                    <TextBox Name="state" TextChanged="textChangedEventHandler" Text="{Binding state, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Margin="10"  Grid.Column="1" Grid.Row="2">
+                    <Label Content="Zip Code:" Target="{Binding ElementName=zip}" />
+                    <TextBox Name="zip" TextChanged="textChangedEventHandler" Text="{Binding zip, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Margin="10"  Grid.Column="2" Grid.Row="2">
+                    <Label Content="Gender:" Target="{Binding ElementName=gender}" />
+                    <TextBox Name="gender" TextChanged="textChangedEventHandler" Text="{Binding gender, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Margin="10"  Grid.Column="0" Grid.Row="3">
+                    <Label Content="Phone:" Target="{Binding ElementName=phone}" />
+                    <TextBox Name="phone" TextChanged="textChangedEventHandler"  Text="{Binding phone, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Margin="10"  Grid.Column="1" Grid.Row="3">
+                    <Label Content="Email:" Target="{Binding ElementName=email}" />
+                    <TextBox Grid.Column="1" TextChanged="textChangedEventHandler" Name="email" Grid.Row="3" Text="{Binding email, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Margin="10"  Grid.Column="2" Grid.Row="3">
+                    <Label Content="Proof:" Target="{Binding ElementName=proof}" />
+                    <TextBox Grid.Column="2" TextChanged="textChangedEventHandler" Name="proof" Grid.Row="3" Text="{Binding proof, Mode=TwoWay}"/>
+                </StackPanel>
+                <StackPanel Margin="10"  Grid.Column="0" Grid.Row="4">
+                    <Label Content="Time:" Target="{Binding ElementName=time}" />
+                    <DatePicker Name="time" SelectedDateChanged="dateChangedEventHandler" Text="{Binding time, Mode=TwoWay}"/>
+                </StackPanel>
+                <Button Content="Save" Grid.Column="1" Grid.Row="4" Click="Save_Button_Click"     HorizontalAlignment="Left"
+                Margin="10,10,0,0"
+                VerticalAlignment="Bottom"
+                Width="75" IsEnabled="False" Name="Save_Button" />
+                <Button Content="Delete" Grid.Column="2" Grid.Row="4" Click="Delete_Button_Click"     HorizontalAlignment="Left"
+                Margin="10,10,0,0"
+                VerticalAlignment="Bottom"
+                Width="75"/>
+            </Grid>
+        </Viewbox>
     </Grid>
 </Window>

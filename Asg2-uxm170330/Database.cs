@@ -71,17 +71,95 @@ namespace Asg2_uxm170330
             return record;
         }
 
+        public List<Record> getRecords() {
+            return dbMap.Values.ToList();
+        }
+
         public Result insertRecord(Record record)
         {
             Result result = new Result();
             try
             {
                 string key = String.Concat(record.fName, record.lName, record.phone);
-                dbMap.Add(key, record);
-                result.success = true;
-                result.message = "Record Inserterd Successfully";
+                try
+                {
+                    dbMap.Add(key, record);
+                    result.success = true;
+                    result.message = "Record Inserterd Successfully";
+                    writeToDatabase();
+                }
+                catch (Exception e) {
+                    result.success = false;
+                    result.message = e.Message;
+                }
+
             }
             catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                result.success = false;
+                result.message = e.Message;
+            }
+            return result;
+        }
+
+        public Result modifyRecord(Record record) {
+            Result result = new Result();
+            try
+            {
+                string key = String.Concat(record.fName, record.lName, record.phone);
+                try
+                {
+                    if(dbMap.ContainsKey(key))
+                    {
+                        dbMap[key] = record;
+                        result.success = true;
+                        result.message = "Record Modified Successfully";
+                        writeToDatabase();
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    result.success = false;
+                    result.message = e.Message;
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+                result.success = false;
+                result.message = e.Message;
+            }
+            return result;
+        }
+
+        public Result deleteRecord(Record record)
+        {
+            Result result = new Result();
+            try
+            {
+                string key = String.Concat(record.fName, record.lName, record.phone);
+                try
+                {
+                    if (dbMap.ContainsKey(key))
+                    {
+                        dbMap.Remove(key);
+                        result.success = true;
+                        result.message = "Record Deleted Successfully";
+                        writeToDatabase();
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    result.success = false;
+                    result.message = e.Message;
+                }
+
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
                 result.success = false;

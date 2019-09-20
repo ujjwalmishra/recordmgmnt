@@ -1,0 +1,4 @@
+﻿To Do
+Database loading stage wait before write
+Input validations
+Screen size relative
