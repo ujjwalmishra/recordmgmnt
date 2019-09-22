@@ -1,4 +1,5 @@
 ﻿To Do
-Database loading stage wait before write
-Input validations
-Screen size relative
+Database loading stage wait before write ||||||||||
+Input validations 
+Screen size relative  ||||||||||||
+Add new fields |||||||||||

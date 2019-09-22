@@ -36,6 +36,11 @@ namespace Asg2_uxm170330
           
             return records;
         }
+
+        public bool keyExists(string key)
+        {
+            return dbConn.keyExists(key);
+        }
         public Result addRecord(Record record)
         {
             Result result = new Result();
@@ -50,12 +55,12 @@ namespace Asg2_uxm170330
             return result;
         }
 
-        public Result modifyRecord(Record record)
+        public Result modifyRecord(Record record, string oldKey)
         {
             Result result = new Result();
             try
             {
-                result = dbConn.modifyRecord(record);
+                result = dbConn.modifyRecord(record, oldKey);
             }
             catch (Exception e)
             {

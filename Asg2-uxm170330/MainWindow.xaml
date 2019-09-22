@@ -11,8 +11,9 @@
         <Button Content="Add"  Click="Add_Button_Click"     HorizontalAlignment="Left"
                 Margin="10,10,0,0"
                 VerticalAlignment="Top"
-                Width="75"/>
-        <ListBox Name="lbTodoList" Width="200" HorizontalAlignment="Left" Margin="10,40,0,0">
+                Width="75"
+                Name="Add_Button"/>
+        <ListBox Name="lbTodoList" Width="200" HorizontalAlignment="Left" Margin="10,40,0,0" ScrollViewer.VerticalScrollBarVisibility="Visible">
             <ListBox.Resources>
                 <!-- Background of selected item when focussed -->
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
@@ -45,7 +46,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Viewbox  Width="560" HorizontalAlignment="Right" Height="600">
+        <Viewbox  Width="560" HorizontalAlignment="Center" Margin="200 0 0 0"  VerticalAlignment="Center" Height="600">
                     <Grid ShowGridLines="False">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="200" />
@@ -62,7 +63,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Margin="10"  Grid.Column="0" Grid.Row="0">
                     <Label Content="First Name:" Target="{Binding ElementName=fName}" />
-                    <TextBox Name="fName" TextChanged="textChangedEventHandler" Text="{Binding fName, Mode=TwoWay}"/>
+                    <TextBox Name="fName" TextChanged="textChangedEventHandler"  KeyDown="firstNameEnteredHandler"  Text="{Binding fName, Mode=TwoWay}"/>
                 </StackPanel>
                 <StackPanel Margin="10"  Grid.Column="1" Grid.Row="0">
                     <Label Content="Middle Name:" Target="{Binding ElementName=mName}" />

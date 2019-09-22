@@ -23,32 +23,51 @@ namespace Asg2_uxm170330
         RecordsAPI api = RecordsAPI.Instance;
         Boolean modify = true;
         Record currentRecord = null;
+        int selectedIndex = 0;
         List<Record> records;
+        List<Record> cloneRecords;
+        DateTime firstField;
         public MainWindow()
         {
             
             InitializeComponent();
-            this.Title = "App";
+            //this.Title = "App";
             records = api.getRecords();
+            cloneRecords = records.ConvertAll(record => (Record)record.Clone()).ToList();
             lbTodoList.ItemsSource = records;
-            if(records.Count > 0)
+            if (cloneRecords.Count > 0)
             {
-                this.DataContext = records[0];
-                this.currentRecord = records[0];
+                this.DataContext = cloneRecords[0];
+                this.currentRecord = cloneRecords[0];
+                Add_Button.Focus();
+                lbTodoList.SelectedItem = records[0];
+            }
+            else
+            {
+                this.modify = false;
+                this.DataContext = null;
             }
 
         }
 
         private void Reload_Records()
         {
-            this.Title = "App";
+            //this.Title = "App";
             records = api.getRecords();
+            cloneRecords = records.ConvertAll(record => (Record)record.Clone()).ToList();
             lbTodoList.ItemsSource = records;
-            if (records.Count > 0)
+            if (cloneRecords.Count > 0)
             {
-                this.DataContext = records[0];
-                this.currentRecord = records[0];
+                this.DataContext = cloneRecords[0];
+                this.currentRecord = cloneRecords[0];
+                lbTodoList.SelectedItem = records[0];
             }
+            else
+            {
+                this.modify = false;
+                this.DataContext = null;
+            }
+
         }
 
         private void Add_Button_Click(object sender, RoutedEventArgs e)
@@ -56,16 +75,19 @@ namespace Asg2_uxm170330
             this.Title = "Enter items";
             this.DataContext = null;
             this.modify = false;
+            fName.Focus();
         }
 
         private void Select_Record(Object sender, RoutedEventArgs e)
         {
             Grid grid = sender as Grid;
             int index = lbTodoList.Items.IndexOf(grid.DataContext);
-            this.DataContext = records[index];
+            this.DataContext = cloneRecords[index];
             Console.WriteLine(index);
             Save_Button.IsEnabled = false;
-            this.Title = "App";
+            selectedIndex = index;
+            this.modify = true;
+            //this.Title = "App";
         }
         private void Delete_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -89,14 +111,19 @@ namespace Asg2_uxm170330
         {
 
             Save_Button.IsEnabled = true;
-            this.Title = "Record Modified";
+            //this.Title = "Record Modified";
 
+        }
+
+        private void firstNameEnteredHandler(object sender, KeyEventArgs e)
+        {
+            firstField = DateTime.Now;
         }
 
         private void dateChangedEventHandler(object sender, SelectionChangedEventArgs e)
         {
 
-            Save_Button.IsEnabled = true; this.Title = "Record Modified";
+            Save_Button.IsEnabled = true; //this.Title = "Record Modified";
 
         }
 
@@ -108,8 +135,28 @@ namespace Asg2_uxm170330
             if (this.modify)
             {
                 Record mRecord = (Record)this.DataContext;
-                result = api.modifyRecord(mRecord);
-                Save_Button.IsEnabled = false;
+                string key = String.Concat(mRecord.fName, mRecord.lName, mRecord.phone);
+                Record oldRec = records[selectedIndex];
+                string oldKey = String.Concat(oldRec.fName, oldRec.lName, oldRec.phone);
+                if(String.Equals(oldKey, key))
+                {
+                    result = api.modifyRecord(mRecord, oldKey);
+                    Save_Button.IsEnabled = false;
+                }
+                else
+                {
+                    if (!api.keyExists(key))
+                    {
+                        result = api.modifyRecord(mRecord, oldKey);
+                        Save_Button.IsEnabled = false;
+                    }
+                    else
+                    {
+                        result.message = "Duplicate key";
+                    }
+                }
+
+
             }
             else
             {
@@ -126,15 +173,19 @@ namespace Asg2_uxm170330
                 string eemail = email.Text;
                 string pproof = proof.Text;
                 string ttime = time.Text;
+                DateTime ftime = firstField;
+                DateTime sTime = DateTime.Now;
+                int count = 0;
                 Record record = new Record(fiName, miName, laName, aaddress1, aaddress2, ccity, sstate, Int32.Parse(zzip), ggender, pphone, eemail,
-                   Boolean.Parse(pproof), DateTime.Parse(ttime));
+                   Boolean.Parse(pproof), DateTime.Parse(ttime), ftime, sTime, count);
                 result = api.addRecord(record);
-                this.modify = false;
+                this.modify = true;
                 Save_Button.IsEnabled = false;
             }
 
             this.Title = result.message;
             Reload_Records();
+            Save_Button.IsEnabled = false;
         }
     }
 }

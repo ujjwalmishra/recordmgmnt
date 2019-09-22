@@ -11,6 +11,7 @@ namespace Asg2_uxm170330
     {
 
         private Dictionary<string, Record> dbMap = new Dictionary<string, Record>();
+        private bool dbLoaded = false;
         private Database()
         {
             this.checkDbFile();
@@ -60,6 +61,8 @@ namespace Asg2_uxm170330
                     Result result = insertRecord(record);
                     Console.WriteLine(result.message);
                 }
+
+                dbLoaded = true;
             }
 
         }
@@ -75,6 +78,15 @@ namespace Asg2_uxm170330
             return dbMap.Values.ToList();
         }
 
+        public bool keyExists(string key)
+        {
+            if (dbMap.ContainsKey(key))
+            {
+                return true;
+            }
+            return false;
+        }
+
         public Result insertRecord(Record record)
         {
             Result result = new Result();
@@ -86,7 +98,10 @@ namespace Asg2_uxm170330
                     dbMap.Add(key, record);
                     result.success = true;
                     result.message = "Record Inserterd Successfully";
-                    writeToDatabase();
+                    if(dbLoaded)
+                    {
+                        writeToDatabase();
+                    }
                 }
                 catch (Exception e) {
                     result.success = false;
@@ -103,21 +118,21 @@ namespace Asg2_uxm170330
             return result;
         }
 
-        public Result modifyRecord(Record record) {
+        public Result modifyRecord(Record record, string oldKey) {
             Result result = new Result();
             try
             {
-                string key = String.Concat(record.fName, record.lName, record.phone);
+
+                //string key = String.Concat(record.fName, record.lName, record.phone);
+
                 try
                 {
-                    if(dbMap.ContainsKey(key))
-                    {
-                        dbMap[key] = record;
-                        result.success = true;
-                        result.message = "Record Modified Successfully";
-                        writeToDatabase();
-                    }
-
+                    dbMap[oldKey] = record;
+                    writeToDatabase();
+                    dbLoaded = false;
+                    dbMap = new Dictionary<string, Record>();
+                    loadDatabase();
+                    result.message = "Modified";
                 }
                 catch (Exception e)
                 {
@@ -175,7 +190,7 @@ namespace Asg2_uxm170330
             {
                 using (StreamWriter sw = File.CreateText("CS6326Asg2.txt"))
                 {
-                    foreach (var item in dbMap.OrderBy(i => i.Value.time))
+                    foreach (var item in dbMap.OrderBy(i => i.Value.saveTime))
                     {
                         string serializeRecord = item.Value.getSerialized();
                         sw.WriteLine(serializeRecord);
