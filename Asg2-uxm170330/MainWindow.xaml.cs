@@ -27,6 +27,8 @@ namespace Asg2_uxm170330
         List<Record> records;
         List<Record> cloneRecords;
         DateTime firstField;
+        bool isFormValid = false;
+        int keycount = 0;
         public MainWindow()
         {
             
@@ -46,6 +48,7 @@ namespace Asg2_uxm170330
             {
                 this.modify = false;
                 this.DataContext = null;
+                fName.Focus();
             }
 
         }
@@ -75,6 +78,7 @@ namespace Asg2_uxm170330
             this.Title = "Enter items";
             this.DataContext = null;
             this.modify = false;
+            this.keycount = 0;
             fName.Focus();
         }
 
@@ -127,9 +131,82 @@ namespace Asg2_uxm170330
 
         }
 
+        private void txt_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Back)
+            {
+                keycount++;
+            }
+        }
+
+        private void MinLengthCheckHandler(object sender, RoutedEventArgs e)
+        {
+            int total = 3;
+            TextBox elem = (TextBox)sender;
+
+            if(elem.Name == "state")
+            {
+                total = 2;
+            }
+            if (elem.Name == "gender")
+            {
+                total = 1;
+            }
+            StackPanel parentPanel = (StackPanel)((TextBox)sender).Parent;
+            Label lable = parentPanel.Children.OfType<Label>().FirstOrDefault();
+            string content = lable.Content.ToString();
+            if (((TextBox)sender).Text.Length < total)
+            {
+                lable.Content = content + "-" + "Need min "+ total +" characters";
+                this.isFormValid = false;
+            }
+            else
+            {
+                if(content.IndexOf("-") > 0)
+                {
+                    lable.Content = content.Substring(0, content.IndexOf("-"));
+                }
+                this.isFormValid = true;
+            }
+            if (elem.Name == "proof")
+            {
+                if(elem.Text == "Yes" || elem.Text =="No")
+                {
+                    if (content.IndexOf("-") > 0)
+                    {
+                        lable.Content = content.Substring(0, content.IndexOf("-"));
+                    }
+                    this.isFormValid = true;
+                }
+                else
+                {
+                    lable.Content = content + "-" + "Invalid only options Yes or No";
+                    this.isFormValid = false;
+                }
+            }
+            if (elem.Name == "zip")
+            {
+                if (!char.IsDigit(elem.Text, elem.Text.Length - 1))
+                {
+                    Console.WriteLine("Not valid");
+                    this.isFormValid = false;
+                    lable.Content = content + "-" + "Only numbers allowed";
+                }
+                else
+                {
+                    Console.WriteLine("Not valid");
+                }
+            }
+                
+
+        }
+
         private void Save_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            if(!this.isFormValid)
+            {
+                return;
+            }
             this.Title = "Saving";
             Result result = new Result();
             if (this.modify)
@@ -161,10 +238,10 @@ namespace Asg2_uxm170330
             else
             {
                 string fiName = fName.Text;
-                string miName = mName.Text;
+                string miName = mName.Text.Length > 0 ? mName.Text: " ";
                 string laName = lName.Text;
                 string aaddress1 = address1.Text;
-                string aaddress2 = address2.Text;
+                string aaddress2 = address2.Text.Length > 0 ? address2.Text : " ";
                 string ccity = city.Text;
                 string sstate = state.Text;
                 string zzip = zip.Text;
@@ -175,9 +252,8 @@ namespace Asg2_uxm170330
                 string ttime = time.Text;
                 DateTime ftime = firstField;
                 DateTime sTime = DateTime.Now;
-                int count = 0;
                 Record record = new Record(fiName, miName, laName, aaddress1, aaddress2, ccity, sstate, Int32.Parse(zzip), ggender, pphone, eemail,
-                   Boolean.Parse(pproof), DateTime.Parse(ttime), ftime, sTime, count);
+                   pproof, DateTime.Parse(ttime), ftime, sTime, keycount);
                 result = api.addRecord(record);
                 this.modify = true;
                 Save_Button.IsEnabled = false;

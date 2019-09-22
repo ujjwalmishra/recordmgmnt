@@ -20,7 +20,7 @@ namespace Asg2_uxm170330
         public string gender { get; set; }
         public string phone { get; set; }
         public string email { get; set; }
-        public bool proof { get; set; }
+        public string proof { get; set; }
         public DateTime time { get; set; }
         public DateTime firstTime { get; set; }
         public DateTime saveTime { get; set; }
@@ -39,7 +39,7 @@ namespace Asg2_uxm170330
             this.gender = fields[8];
             this.phone = fields[9];
             this.email = fields[10];
-            this.proof = Boolean.Parse(fields[11]);
+            this.proof = fields[11];
             this.time = DateTime.Parse(fields[12]);
             this.firstTime = DateTime.Parse(fields[13]);
             this.saveTime = DateTime.Parse(fields[14]);
@@ -47,7 +47,7 @@ namespace Asg2_uxm170330
 
         }
         public Record(string fname, string mname, string lname, string address1, string address2, string city,
-            string state, int zip, string gender, string phone, string email, bool proof, DateTime time, DateTime ftime,
+            string state, int zip, string gender, string phone, string email, string proof, DateTime time, DateTime ftime,
             DateTime stime, int counts) {
 
             fName = fname;
