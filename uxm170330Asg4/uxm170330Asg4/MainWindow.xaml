@@ -1,0 +1,48 @@
+﻿<Window x:Class="uxm170330Asg4.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:uxm170330Asg4"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="1000">
+    <Grid>
+        <DockPanel Margin="10" LastChildFill="false">
+            <TextBlock Width="700" HorizontalAlignment="Center" DockPanel.Dock="Top" Name="Error"/>
+            <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Top" Width="Auto" Margin="0,10,0,10">
+                <TextBox Width="800" AcceptsReturn="True" TextWrapping="Wrap" Name="FilePath" />
+                <Button Name="btnOpenFile" Margin="8,8,0,0" Click="btnOpenFile_Click">Choose file to Search</Button>
+            </WrapPanel>
+            <WrapPanel HorizontalAlignment="Center" DockPanel.Dock="Top" Width="Auto" Margin="0,10,0,10">
+                <TextBox Width="750" AcceptsReturn="True" TextWrapping="Wrap" Name="SearchText" />
+                <Button Name="btnSearchFile" Margin="8,8,0,0" Click="btnSearchFile_Click">Search Text</Button>
+                <Button Name="btnSearchCancel" Margin="8,8,0,0" Click="btnSearchCancel_Click" >Cancel Search</Button>
+            </WrapPanel>
+
+            <ListView Name="SearchedText"  Height="400" DockPanel.Dock="Top">
+ 
+                <ListView.View>
+
+                    <GridView AllowsColumnReorder="true"
+              ColumnHeaderToolTip="Searched texts">
+
+                        <GridViewColumn DisplayMemberBinding=
+                          "{Binding Path=LineNumber}" 
+                      Header="Line No" Width="100"/>
+
+                        <GridViewColumn DisplayMemberBinding=
+                          "{Binding Path=Line}" 
+                      Header="Text" Width="600"/>
+
+                    </GridView>
+
+                </ListView.View>
+            </ListView>
+            <StatusBar DockPanel.Dock="Bottom" Height="20" Width="Auto">
+                 <StatusBarItem >
+                    <ProgressBar Width="990" Height="20" Value="0.001" Name="searchProgress" />
+                </StatusBarItem>
+            </StatusBar>
+        </DockPanel>
+    </Grid>
+</Window>
